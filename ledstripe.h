@@ -21,15 +21,15 @@
 #define ledstripe_h
 
 #ifndef REDLEDPIN
-#define REDLEDPIN 3
+#define REDLEDPIN 5
 #endif
 
 #ifndef GREENLEDPIN
-#define GREENLEDPIN 5
+#define GREENLEDPIN 6
 #endif
 
 #ifndef BLUELEDPIN
-#define BLUELEDPIN 6
+#define BLUELEDPIN 3
 #endif
 
 #include <Arduino.h>
