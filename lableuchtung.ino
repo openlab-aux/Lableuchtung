@@ -22,37 +22,66 @@
 #include "ledstripe.h"
 #include "beacon.h"
 
+#define ENABLE_AUTOMODE 251
+#define ENABLE_BEACON   252
+#define DISABLE_BEACON  253
+
 Beacon beac;
 LedStripe leds;
 
 void serialEvent() {
-    byte index = 0;
-    byte serial_buffer [4] = {0, 0, 0, 0};
-    while (Serial.available() > 0 && index < 4) {
-        serial_buffer[index] = Serial.read();
-        index++;
-        delay(5); // Needed to read all variables
+
+    byte serial_buffer[4];
+    Serial.readBytes((char *)serial_buffer, 4);
+
+    switch(serial_buffer[0]) {
+        case AUTOMODE:
+            // TODO enable automode
+            break;
+
+        case ENABLE_BEACON:
+            beac.enable();
+            break;
+
+        case DISABLE_BEACON:
+            beac.disable();
+            break;
+
+        case 254: 
+            // TESTING
+            leds.setColors(
+                    serial_buffer[1], 
+                    serial_buffer[2],
+                    serial_buffer[3]);
+
+            leds.writeColors();
+            break;
+
+        case 255:
+            break;
+
+        default:
+            // TODO Leucht mode
+            break;
     }
-    Serial.println(serial_buffer[0]);
-    Serial.println(serial_buffer[1]);
-    Serial.println(serial_buffer[2]);
-    Serial.println(serial_buffer[3]);
-    if (index > 0) {
-        (serial_buffer[0] > 64) ? beac.setMode(serial_buffer) : leds.setMode(serial_buffer);
-    }
+
+    byte chk = serial_buffer[0] 
+             ^ serial_buffer[1] 
+             ^ serial_buffer[2] 
+             ^ serial_buffer[3];
+
+    Serial.write(chk);
 }
 
 void setup() {
-    pinMode(REDLEDPIN, OUTPUT);
+    pinMode(REDLEDPIN,   OUTPUT);
     pinMode(GREENLEDPIN, OUTPUT);
-    pinMode(BLUELEDPIN, OUTPUT);
-    pinMode(BEACONPIN, OUTPUT);
-    Serial.begin(9600);
+    pinMode(BLUELEDPIN,  OUTPUT);
+    pinMode(BEACONPIN,   OUTPUT);
+    Serial.begin(115200);
 }
 
 void loop() {
-    beac.doCurrentMode();
-    leds.doCurrentMode();
-    delay(50);
+    //delay(50);
 }
 
