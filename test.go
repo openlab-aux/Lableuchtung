@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"time"
 
@@ -29,7 +30,7 @@ type LabLeucht struct {
 
 func (l *LabLeucht) sendPackage(pkg Package) error {
 
-	fmt.Printf("Sending package [%3d %3d %3d %3d]\n", pkg[0], pkg[1], pkg[2], pkg[3])
+	//fmt.Printf("Sending package [%3d %3d %3d %3d]\n", pkg[0], pkg[1], pkg[2], pkg[3])
 
 	var timeoutMult time.Duration
 
@@ -37,7 +38,9 @@ func (l *LabLeucht) sendPackage(pkg Package) error {
 		timeoutMult = time.Duration(pkg[0]) * 100
 	}
 
-	timeout := time.After(time.Millisecond*timeoutMult + l.responseTimeout)
+	//fmt.Println("timeout is", timeoutMult*time.Millisecond+l.responseTimeout)
+
+	timeout := time.After(timeoutMult*time.Millisecond + l.responseTimeout)
 
 	_, err := l.Write([]byte(pkg))
 	if err != nil {
@@ -93,22 +96,23 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	leucht.responseTimeout = 1 * time.Millisecond
+	leucht.responseTimeout = 10 * time.Millisecond
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(3 * time.Second)
+	ioutil.ReadAll(leucht) // remove fnord
 
 	fmt.Println("testing RED")
-	if err := leucht.sendPackage([]byte{254, 255, 0, 0}); err != nil {
+	if err := leucht.sendPackage(Package{0, 255, 0, 0}); err != nil {
 		fmt.Println(err)
 	}
 	time.Sleep(1 * time.Second)
 	fmt.Println("testing GREEN")
-	if err := leucht.sendPackage([]byte{254, 0, 255, 0}); err != nil {
+	if err := leucht.sendPackage(Package{0, 0, 255, 0}); err != nil {
 		fmt.Println(err)
 	}
 	time.Sleep(1 * time.Second)
 	fmt.Println("testing BLUE")
-	if err := leucht.sendPackage([]byte{254, 0, 0, 255}); err != nil {
+	if err := leucht.sendPackage(Package{0, 0, 0, 255}); err != nil {
 		fmt.Println(err)
 	}
 	time.Sleep(1 * time.Second)
@@ -116,34 +120,49 @@ func main() {
 	if err := leucht.sendPackage(EnableBeacon); err != nil {
 		fmt.Println(err)
 	}
-	time.Sleep(1 * time.Second)
+	time.Sleep(500 * time.Millisecond)
 	if err := leucht.sendPackage(DisableBeacon); err != nil {
 		fmt.Println(err)
 	}
 	time.Sleep(1 * time.Second)
 
+	fmt.Println("testing fade --> red")
+	if err := leucht.sendPackage(Package{10, 255, 0, 0}); err != nil {
+		fmt.Println(err)
+	}
+	time.Sleep(1 * time.Second)
+	fmt.Println("testing fade --> green")
+	if err := leucht.sendPackage(Package{10, 0, 255, 0}); err != nil {
+		fmt.Println(err)
+	}
+	time.Sleep(1 * time.Second)
+	fmt.Println("testing fade --> blue")
+	if err := leucht.sendPackage(Package{10, 0, 0, 255}); err != nil {
+		fmt.Println(err)
+	}
+
+	time.Sleep(1 * time.Second)
+	fmt.Println("starting penetration test")
 	for {
 
 		for i := 0; i < 255; i++ {
-			//time.Sleep(1 * time.Microsecond)
-			if err := leucht.sendPackage([]byte{254, byte(255 - i), byte(i), 0}); err != nil {
+			if err := leucht.sendPackage(Package{0, byte(255 - i), byte(i), 0}); err != nil {
 				fmt.Println(err)
 			}
 		}
 
 		for i := 0; i < 255; i++ {
-			//time.Sleep(1 * time.Microsecond)
-			if err := leucht.sendPackage([]byte{254, 0, byte(255 - i), byte(i)}); err != nil {
+			if err := leucht.sendPackage(Package{0, 0, byte(255 - i), byte(i)}); err != nil {
 				fmt.Println(err)
 			}
 		}
 
 		for i := 0; i < 255; i++ {
-			//time.Sleep(1 * time.Microsecond)
-			if err := leucht.sendPackage([]byte{254, byte(i), 0, byte(255 - i)}); err != nil {
+			if err := leucht.sendPackage(Package{0, byte(i), 0, byte(255 - i)}); err != nil {
 				fmt.Println(err)
 			}
 		}
 
 	}
+
 }

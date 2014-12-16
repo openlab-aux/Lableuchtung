@@ -14,7 +14,9 @@
  *    You should have received a copy of the GNU Affero General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *    Authors: Stefan Luecke <glaxx@glaxx.net>
+ *    Authors: 
+ *      Stefan Luecke <glaxx@glaxx.net>
+ *      Michael Wendland <michael@michiwend.com>
  */
 
 #ifndef ledstripe_h
@@ -46,6 +48,7 @@ class LedStripe {
         void glowingMode();
         void setMode(byte newMode[4]);
         void doCurrentMode();
+        void fadeTo(byte t, byte r, byte g, byte b);
 
     private:
         byte red;

@@ -123,3 +123,52 @@ void LedStripe::doCurrentMode() {
     }
 }
 
+
+void LedStripe::fadeTo(byte t, byte r, byte g, byte b) {
+
+    if(t == 0) {
+        this->setColors(r, g, b);
+        this->writeColors();
+        return;
+    }
+
+    int dR = r - this->red;
+    int dG = g - this->green;
+    int dB = b - this->blue;
+
+    int maxDelta = max(abs(dR) ,max(abs(dG), abs(dB)));
+    if(maxDelta == 0) {
+        return;
+    }
+
+     // Float colors (for calculation)
+    float fR = this->red;
+    float fG = this->green;
+    float fB = this->blue;
+
+    // Step for each chan
+    float sR = (float)dR / (float)maxDelta;
+    float sG = (float)dG / (float)maxDelta;
+    float sB = (float)dB / (float)maxDelta;
+
+    long d = ((float)t / (float)maxDelta) * 100.0 * 1000.0;
+
+    for(int i = 0; i < maxDelta; i++) {
+        fR += sR;
+        fG += sG;
+        fB += sB;
+
+        this->setColors((int)fR, (int)fG, (int)fB);
+        this->writeColors();
+
+        // see http://arduino.cc/en/Reference/DelayMicroseconds
+        if(d > 16383) {
+            delay(d/1000);
+        }
+        else {
+            delayMicroseconds(d);
+        }
+    }
+    this->setColors(r, g, b);
+    this->writeColors();
+}

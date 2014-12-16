@@ -48,20 +48,17 @@ void serialEvent() {
             break;
 
         case 254: 
-            // TESTING
-            leds.setColors(
-                    serial_buffer[1], 
-                    serial_buffer[2],
-                    serial_buffer[3]);
-
-            leds.writeColors();
             break;
 
         case 255:
             break;
 
         default:
-            // TODO Leucht mode
+            leds.fadeTo(
+                    serial_buffer[0],
+                    serial_buffer[1],
+                    serial_buffer[2],
+                    serial_buffer[3]);
             break;
     }
 
