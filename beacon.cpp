@@ -18,20 +18,16 @@
  */
 #include "beacon.h"
 
-Beacon::Beacon(void) {
-    this->mode = 0;
+void Beacon::enable() {
+    digitalWrite(BEACONPIN, HIGH);
+    this->enabled = true;
 }
 
-void Beacon::setMode(byte newMode[4]) {
-    this->mode = newMode[0]; //TODO
+void Beacon::disable() {
+    digitalWrite(BEACONPIN, LOW);
+    this->enabled = false;
 }
 
-void Beacon::doCurrentMode() {
-    switch(this->mode) {
-        case 65:   digitalWrite(BEACONPIN, HIGH);
-                    break;
-        case 66:   digitalWrite(BEACONPIN, LOW);
-                    break;
-    }
+bool Beacon::state() {
+    return this->enabled;
 }
-

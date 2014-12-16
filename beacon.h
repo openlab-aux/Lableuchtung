@@ -28,12 +28,12 @@
 
 class Beacon {
     public:
-        Beacon();
-        void setMode(byte newMode[4]);
-        void doCurrentMode();
+        void enable();
+        void disable();
+        bool state();
     
     private:
-        byte mode;
+        bool enabled;
 };
 
 #endif
