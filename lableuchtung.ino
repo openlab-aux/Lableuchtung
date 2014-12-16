@@ -14,8 +14,9 @@
  *    You should have received a copy of the GNU Affero General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *    Authors:  Stefan Luecke <glaxx@glaxx.net>
- *              Michael Wendland <michael@michiwend.com>
+ *    Authors: 
+ *      Stefan Luecke <glaxx@glaxx.net>
+ *      Michael Wendland <michael@michiwend.com>
  */
 
 
@@ -35,7 +36,7 @@ void serialEvent() {
     Serial.readBytes((char *)serial_buffer, 4);
 
     switch(serial_buffer[0]) {
-        case AUTOMODE:
+        case ENABLE_AUTOMODE:
             // TODO enable automode
             break;
 

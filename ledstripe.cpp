@@ -14,45 +14,34 @@
  *    You should have received a copy of the GNU Affero General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *    Authors: Stefan Luecke <glaxx@glaxx.net>
+ *    Authors: 
+ *      Stefan Luecke <glaxx@glaxx.net>
+ *      Michael Wendland <michael@michiwend.com>
  */
 
 #include "ledstripe.h"
 
-LedStripe::LedStripe(void) 
-{
-    this->red = 0;
+LedStripe::LedStripe(void) {
+    this->red   = 0;
     this->green = 0;
-    this->blue = 0;
-    this->mode = 0;
-    this->glowing_red_ascending = true;
+    this->blue  = 0;
+    this->mode  = 0;
+    this->glowing_red_ascending   = true;
     this->glowing_green_ascending = true;
-    this->glowing_blue_ascending = true;
-    this->glowing_active_color = 0;
-}
-
-void LedStripe::setRed(byte red) {
-    this->red = red;
-}
-
-void LedStripe::setGreen(byte green) {
-    this->green = green;
-}
-
-void LedStripe::setBlue(byte blue) {
-    this->blue = blue;
+    this->glowing_blue_ascending  = true;
+    this->glowing_active_color    = 0;
 }
 
 void LedStripe::setColors(byte red, byte green, byte blue) {
-    setRed(red);
-    setGreen(green);
-    setBlue(blue);
+    this->red   = red;
+    this->green = green;
+    this->blue  = blue;
 }
 
 void LedStripe::writeColors() {
-    analogWrite(REDLEDPIN, this->red);
+    analogWrite(REDLEDPIN,   this->red);
     analogWrite(GREENLEDPIN, this->green);
-    analogWrite(BLUELEDPIN, this->blue);
+    analogWrite(BLUELEDPIN,  this->blue);
 }
 
 void LedStripe::idleMode() {

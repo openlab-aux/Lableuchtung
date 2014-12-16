@@ -39,9 +39,6 @@
 class LedStripe {
     public:
         LedStripe();
-        void setRed(byte red);
-        void setGreen(byte green);
-        void setBlue(byte blue);
         void setColors(byte red, byte green, byte blue);
         void writeColors();
         void idleMode();
