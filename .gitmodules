@@ -1,0 +1,3 @@
+[submodule "golableuchtung"]
+	path = golableuchtung
+	url = git@github.com:openlab-aux/golableuchtung.git
