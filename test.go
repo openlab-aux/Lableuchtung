@@ -34,7 +34,7 @@ func (l *LabLeucht) sendPackage(pkg Package) error {
 	var timeoutMult time.Duration
 
 	if pkg[0] < 251 {
-		timeoutMult = time.Duration(pkg[0]) * 10
+		timeoutMult = time.Duration(pkg[0]) * 100
 	}
 
 	timeout := time.After(time.Millisecond*timeoutMult + l.responseTimeout)
