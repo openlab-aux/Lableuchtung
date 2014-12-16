@@ -17,33 +17,13 @@
  *    Authors:  Stefan Luecke <glaxx@glaxx.net>
  *              Michael Wendland <michael@michiwend.com>
  */
+
+
 #include "ledstripe.h"
 #include "beacon.h"
 
 Beacon beac;
 LedStripe leds;
-
-/*
- * WIE LEUCHTEST DU!?
- *     a simple binary leucht-protocol
- *
- * you can send 1 or 4 bytes as follows:
- * the first byte is the command or time byte. Use 251-255 to invoke
- * different commands otherwise it is interpreted as time in 10ms. See table
- *
- * |commands / time in 10ms |R        |G        |B        |Result
- * +------------------------+---------+---------+---------+-----------------
- * |11111011   251          |         |         |         |Enable automode
- * |11111100   252          |         |         |         |Enable beacon
- * |11111101   253          |         |         |         |Disable beacon
- * |11111110   254          |         |         |         |
- * |11111111   255          |         |         |         |
- * +------------------------+---------+---------+---------+-----------------
- * |00000000     0          |00000000 |00000000 |00000000 |turn all LEDs off
- * |00000000     0          |11111111 |11111111 |11111111 |flash to full white
- * |01100100   100          |11111111 |00000000 |00000000 |fade to full red in 1 sec
- *
- */
 
 void serialEvent() {
     byte index = 0;
