@@ -21,7 +21,7 @@
 #define beacon_h
 
 #ifndef BEACONPIN
-#define BEACONPIN 4
+#define BEACONPIN 7
 #endif
 
 #include <Arduino.h>

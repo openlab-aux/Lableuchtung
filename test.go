@@ -2,34 +2,30 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"net"
 	"time"
 
 	"github.com/openlab-aux/golableuchtung"
-
-	serial "github.com/huin/goserial"
 )
 
 func main() {
 
 	leucht := lableuchtung.LabLeucht{}
 
-	c := &serial.Config{
-		Name: "/dev/ttyACM0",
-		Baud: 115200,
-	}
-
-	var err error
-
-	leucht.ReadWriteCloser, err = serial.OpenPort(c)
+	serverAddr, err := net.ResolveUDPAddr("udp", "10.11.7.3:1337")
 	if err != nil {
 		log.Fatal(err)
 	}
-	leucht.ResponseTimeout = 10 * time.Millisecond
 
-	time.Sleep(3 * time.Second)
-	ioutil.ReadAll(leucht) // remove fnord
+	leucht.ReadWriteCloser, err = net.DialUDP("udp", nil, serverAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer leucht.Close()
+
+	leucht.ResponseTimeout = 100 * time.Millisecond
 
 	fmt.Println("testing RED")
 	if err := leucht.SendPackage(lableuchtung.Package{0, 255, 0, 0}); err != nil {
