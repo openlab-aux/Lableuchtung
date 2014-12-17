@@ -3,6 +3,10 @@ Lableuchtung
 
 ![arduino with shield](misc/arduino.jpg)
 
+## Network
+    Type UDP
+    IP   10.11.7.3
+    Port 1337
 
 ## WIE LEUCHTEST DU!?
 a simple binary leucht-protocol
@@ -21,7 +25,7 @@ different commands otherwise it is interpreted as time in 100ms. See table
     +-------------------------+---------+---------+---------+-----------------
     |00000000     0           |00000000 |00000000 |00000000 |turn all LEDs off
     |00000000     0           |11111111 |11111111 |11111111 |flash to full white
-    |01100100   100           |11111111 |00000000 |00000000 |fade to full red in 1 sec
+    |01100100   100           |11111111 |00000000 |00000000 |fade to full red in 10 sec
 
 The response is just the XOR-result over the four bytes the arduino has received.
 
